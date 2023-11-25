@@ -1,31 +1,44 @@
-const { getMessaging } = require("firebase-admin/messaging");
+const admin = require("firebase-admin");
+const serviceAccount = require("../../firekey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 
 const sendNotification = async (req, res) => {
   try {
-    const { token, title, body, type } = req.body;
+    const { token, title, body, imageUrl, type } = req.body;
 
-    const message = {
+    const response = await admin.messaging().send({
+      token: token,
       data: {
-        title: title,
-        body: body,
         type: type,
       },
-      token: token,
-    };
+      notification: {
+        title: title,
+        body: body,
+        imageUrl: imageUrl,
+      },
+      // Set Android priority to "high"
+      android: {
+        priority: "high",
+      },
+      // Add APNS (Apple) config
+      apns: {
+        payload: {
+          aps: {
+            contentAvailable: true,
+          },
+        },
+        headers: {
+          "apns-push-type": "background",
+          "apns-priority": "5", // Must be `5` when `contentAvailable` is set to true.
+          "apns-topic": "io.flutter.plugins.firebase.messaging", // bundle identifier
+        },
+      },
+    });
 
-    // Send a message to the device corresponding to the provided
-    // registration token.
-    getMessaging()
-      .send(message)
-      .then((response) => {
-        // Response is a message ID string.
-        console.log("Successfully sent message:", response);
-        res.status(200).json({ message: "Notification sent successfully" });
-      })
-      .catch((error) => {
-        console.log("Error sending message:", error);
-        res.status(500).json({ message: "Internal server error" });
-      });
+    res.status(200).json(response);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal server error" });
