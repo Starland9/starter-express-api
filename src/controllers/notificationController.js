@@ -3,9 +3,6 @@ const { getMessaging } = require("firebase-admin/messaging");
 const sendNotification = async (req, res) => {
   try {
     const { token, title, body, type } = req.body;
-    // This registration token comes from the client FCM SDKs.
-    const registrationToken =
-      "fzUD4B8pQKqE5t_hUKz0Hz:APA91bEs5K1MCtPItoIZzhtAjVy7huogSSieG1PdZDokMCpPj_xQhSJdnJCTJzsIZa7bt4--vMgzmaVKKlokLiVFEhx9pKdpT-rCPLmYZXbjgf9it3Y0DHHoIHmjSffvy2EBBqrQdU4G";
 
     const message = {
       data: {
@@ -13,7 +10,7 @@ const sendNotification = async (req, res) => {
         body: body,
         type: type,
       },
-      token: token || registrationToken,
+      token: token,
     };
 
     // Send a message to the device corresponding to the provided
