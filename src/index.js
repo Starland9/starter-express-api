@@ -12,7 +12,7 @@ admin.initializeApp({
 });
 
 // Configuration de Mongoose et de la connexion à la base de données (voir db.js)
-require("../config/database");
+// require("../config/database");
 
 // Middlewares
 app.use(cors());

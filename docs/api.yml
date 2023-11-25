@@ -1,0 +1,14 @@
+openapi: "3.0.2"
+info:
+  title: Anastasie Api
+  version: "1.0"
+servers:
+  - url: https://127.0.0.1:3500/api
+paths:
+  /auth:
+    post:
+      description: "Register a new user"
+      parameters: []
+      responses:
+        "200":
+          description: OK
