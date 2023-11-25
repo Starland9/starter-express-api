@@ -2,8 +2,13 @@
 
 const express = require("express");
 const router = express.Router();
-const { sendNotification } = require("../controllers/notificationController");
+const {
+  sendNotification,
+  sendMultiNotification,
+} = require("../controllers/notificationController");
 
 router.post("/send", sendNotification);
+
+router.post("/send/multi", sendMultiNotification);
 
 module.exports = router;
